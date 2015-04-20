@@ -1,0 +1,16 @@
+.kalender-cur-month {
+    background-color: #aaa;
+}
+.kalender-cur-month-title {
+    margin: .25em 0 .75em;
+    font-size: 150%;
+    font-weight: bold;
+}
+.kalender-cur-month th, .kalender-cur-month td {
+    padding: .5em 1em;
+    text-align: center;
+    background-color: white;
+}
+.kalender-is-sibling-month {
+    color: #aaa;
+}
