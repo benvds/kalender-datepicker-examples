@@ -8,7 +8,10 @@
     </head>
     <body ng-controller="MainController">
         <h1>kalender angular</h1>
-        <ka-cal></ka-cal>
+        <pre>
+            selection: {{ selection }}
+        </pre>
+        <ka-cal selection=selection></ka-cal>
         <script src="node_modules/angular/angular.js"></script>
         <script src="lib/kalender/kalender.js"></script>
         <script src="index.js"></script>
