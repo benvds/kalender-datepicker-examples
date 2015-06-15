@@ -1,4 +1,124 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.kalender = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.kalenderDatepickerAngular = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var kalender = require('kalender');
+
+angular
+.module('kalender.datepicker', [])
+.constant('kalender', kalender)
+.directive('kalenderDatepicker', function() {
+    return {
+        replace: true,
+        scope: {
+            selection: '='
+        },
+        template: '' +
+'<div class="kalender">' +
+'<button type="button" class="kalender-previous-month" ng-click="previousMonth()">previous</button>' +
+'<button type="button" class="kalender-current-month" ng-click="currentMonth()">current</button>' +
+'<button type="button" class="kalender-next-month" ng-click="nextMonth()">next</button>' +
+'<table class="kalender-calendar">' +
+    '<caption class="kalender-calendar-title">{{ month.year }} – {{ month.month }}<caption>' +
+    '<tr>' +
+        '<th ng-repeat="heading in weekDayHeadings">' +
+            '{{ heading }}' +
+        '</th>' +
+    '</tr>' +
+    '<tr ng-repeat="week in calendar">' +
+        '<td class="kalender-day" ' +
+            'ng-repeat="day in week" ' +
+            'ng-click="setSelection(day)" ' +
+            'ng-class="{ \'kalender-is-sibling-month\': day.isSiblingMonth, ' +
+            '\'kalender-is-today\': day.isToday, ' +
+            '\'kalender-is-in-between\': day.isInBetween, ' +
+            '\'kalender-is-weekend\': day.isWeekend, ' +
+            '\'kalender-is-selected\': isSelected(day) ' +
+            '}">' +
+            '{{ day.day }}' +
+        '</td>' +
+    '</tr>' +
+'</table>' +
+'</div>',
+        link: function($scope) {
+            var options = { weekStart: 1 };
+
+            $scope.calendar = [];
+            $scope.weekDayHeadings = [
+                'mon',
+                'tue',
+                'wed',
+                'thu',
+                'fri',
+                'sat',
+                'sun'
+            ];
+            $scope.currentMonth = function() {
+                $scope.month = {
+                    year: (new Date()).getFullYear(),
+                    month: 1 + (new Date()).getMonth()
+                };
+            };
+
+            $scope.isSelected = function(day) {
+                if (angular.isDefined($scope.selection)) {
+                    return kalender.day.isEqual($scope.selection, day);
+                } else {
+                    return false;
+                }
+            };
+
+            $scope.previousMonth = function() {
+                $scope.month =
+                    kalender.month.previousMonth($scope.month);
+            };
+
+            $scope.nextMonth = function() {
+                $scope.month =
+                    kalender.month.nextMonth($scope.month);
+            };
+
+            $scope.setSelection = function(day) {
+                $scope.selection = day;
+            };
+
+            $scope.$watch('month', function(month) {
+                $scope.calendar = kalender.calendar(month, options);
+
+                // set isSelected
+                if (angular.isDefined($scope.selection)) {
+                    $scope.calendar = $scope.calendar.map(function(week) {
+                        return week.map(function(day) {
+                            if (kalender.day.isEqual(day, $scope.selection)) {
+                                day.isSelected = true;
+                            }
+
+                            return day;
+                        });
+                    });
+                }
+
+                // set isWeekend
+                var SATURDAY_DAY_OF_WEEK = 6;
+                var SUNDAY_DAY_OF_WEEK = 0;
+
+                $scope.calendar = $scope.calendar.map(function(week) {
+                    return week.map(function(day) {
+                        if (day.dayOfWeek === SATURDAY_DAY_OF_WEEK ||
+                            day.dayOfWeek === SUNDAY_DAY_OF_WEEK)
+                        {
+                            day.isWeekend = true;
+                        }
+
+                        return day;
+                    });
+                });
+            }, true);
+
+            $scope.currentMonth();
+        }
+    };
+})
+;
+
+},{"kalender":2}],2:[function(require,module,exports){
 module.exports = {
     year: require('./lib/year'),
     month: require('./lib/month'),
@@ -7,7 +127,7 @@ module.exports = {
     util: require('./lib/util')
 };
 
-},{"./lib/calendar":2,"./lib/day":3,"./lib/month":4,"./lib/util":5,"./lib/year":6}],2:[function(require,module,exports){
+},{"./lib/calendar":3,"./lib/day":4,"./lib/month":5,"./lib/util":6,"./lib/year":7}],3:[function(require,module,exports){
 'use strict';
 
 var month = require('./month');
@@ -181,7 +301,7 @@ function getCurrentMonth() {
 
 module.exports = calendar;
 
-},{"./day":3,"./month":4}],3:[function(require,module,exports){
+},{"./day":4,"./month":5}],4:[function(require,module,exports){
 'use strict';
 
 var DAY_WEIGHTS = {
@@ -270,7 +390,7 @@ module.exports = {
     isEqual: isEqual
 };
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 var year = require('./year');
@@ -414,7 +534,7 @@ module.exports = {
     days: days
 };
 
-},{"./day":3,"./year":6}],5:[function(require,module,exports){
+},{"./day":4,"./year":7}],6:[function(require,module,exports){
 'use strict';
 
 /**
@@ -436,7 +556,7 @@ module.exports = {
     mapDays: mapDays
 };
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 /**
@@ -456,4 +576,4 @@ module.exports = {
 
 },{}]},{},[1])(1)
 });
-//# sourceMappingURL=kalender.js.map
+//# sourceMappingURL=kalender-datepicker-angular.js.map

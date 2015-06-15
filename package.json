@@ -1,19 +1,47 @@
 {
-  "name": "kalendar-angular",
-  "version": "1.0.0",
+  "name": "kalender-datepicker-angular",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "httpster"
+    "start": "httpster",
+    "lint:hint": "jshint lib examples",
+    "lint:styleguide": "jscs lib examples",
+    "lint": "npm run lint:hint && npm run lint:styleguide",
+    "dist:bundle": "browserify ./lib/kalender-datepicker-angular.js --standalone kalender-datepicker-angular --debug | exorcist ./dist/kalender-datepicker-angular.js.map > ./dist/kalender-datepicker-angular.js",
+    "dist:compress": "uglifyjs --compress warnings=false --mangle --bare-returns --output ./dist/kalender-datepicker-angular.min.js -- ./dist/kalender-datepicker-angular.js",
+    "dist": "npm run dist:bundle && npm run dist:compress"
   },
-  "author": "",
+  "author": {
+    "name": "Ben van de Sande",
+    "email": "ben@pomodoro.nl"
+  },
   "license": "ISC",
   "devDependencies": {
     "bower": "^1.4.1",
-    "httpster": "^1.0.1"
+    "httpster": "^1.0.1",
+    "exorcist": "^0.2.0",
+    "jscs": "^1.12.0",
+    "jshint": "^2.7.0",
+    "mocha": "^2.2.1",
+    "uglify-js": "^2.4.20"
   },
   "dependencies": {
     "angular": "^1.3.15",
-    "lodash": "^3.7.0"
+    "kalender": "git://github.com/benvds/kalender.git"
+  },
+  "jshintConfig": {
+    "node": true,
+    "quotmark": "single",
+    "unused": "strict",
+    "maxparams": 3,
+    "maxdepth": 3,
+    "maxstatements": 5
+  },
+  "jscsConfig": {
+    "preset": "airbnb",
+    "validateIndentation": 4,
+    "disallowNewlineBeforeBlockStatements": null,
+    "requireSpaceBeforeBlockStatements": null
   }
 }
