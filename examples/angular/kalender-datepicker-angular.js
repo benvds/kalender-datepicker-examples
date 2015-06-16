@@ -26,7 +26,7 @@
                 'ng-click="setSelection(day)" ' +
                 'ng-class="{ \'kalender-is-sibling-month\': day.isSiblingMonth, ' +
                 '\'kalender-is-today\': day.isToday, ' +
-                '\'kalender-is-weekend\': day.isWeekend, ' +
+                '\'kalender-is-weekend\': isWeekendDay(day), ' +
                 '\'kalender-is-selected\': isSelected(day) ' +
                 '}">' +
                 '{{ day.day }}' +
@@ -76,37 +76,16 @@
                     $scope.selection = day;
                 };
 
-                $scope.$watch('month', function(month) {
-                    $scope.calendar = kalender.calendar(month, options);
-
-                    // set isSelected
-                    if (angular.isDefined($scope.selection)) {
-                        $scope.calendar = $scope.calendar.map(function(week) {
-                            return week.map(function(day) {
-                                if (kalender.day.isEqual(day, $scope.selection)) {
-                                    day.isSelected = true;
-                                }
-
-                                return day;
-                            });
-                        });
-                    }
-
-                    // set isWeekend
+                $scope.isWeekendDay = function(day) {
                     var SATURDAY_DAY_OF_WEEK = 6;
                     var SUNDAY_DAY_OF_WEEK = 0;
 
-                    $scope.calendar = $scope.calendar.map(function(week) {
-                        return week.map(function(day) {
-                            if (day.dayOfWeek === SATURDAY_DAY_OF_WEEK ||
-                                day.dayOfWeek === SUNDAY_DAY_OF_WEEK)
-                            {
-                                day.isWeekend = true;
-                            }
+                    return (day.dayOfWeek === SATURDAY_DAY_OF_WEEK ||
+                        day.dayOfWeek === SUNDAY_DAY_OF_WEEK);
+                };
 
-                            return day;
-                        });
-                    });
+                $scope.$watch('month', function(month) {
+                    $scope.calendar = kalender.calendar(month, options);
                 }, true);
 
                 $scope.currentMonth();
