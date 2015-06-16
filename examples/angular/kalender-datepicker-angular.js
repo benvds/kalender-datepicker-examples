@@ -26,7 +26,6 @@
                 'ng-click="setSelection(day)" ' +
                 'ng-class="{ \'kalender-is-sibling-month\': day.isSiblingMonth, ' +
                 '\'kalender-is-today\': day.isToday, ' +
-                '\'kalender-is-in-between\': day.isInBetween, ' +
                 '\'kalender-is-weekend\': day.isWeekend, ' +
                 '\'kalender-is-selected\': isSelected(day) ' +
                 '}">' +
