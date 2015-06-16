@@ -13,7 +13,7 @@
             '<table class="kalender-calendar">' +
                 '<caption class="kalender-calendar-title">' +
                     '<span class="kalender-year"></span> – <span class="kalender-month"></span>' +
-                '<caption>' +
+                '</caption>' +
                 '<tr class="weekday-headings">' +
                     '<th>mon</th>' +
                     '<th>tue</th>' +

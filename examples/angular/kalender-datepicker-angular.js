@@ -1,4 +1,4 @@
-;(function(kalender) {
+;(function(angular, kalender) {
     angular
     .module('kalender.datepicker', [])
     .constant('kalender', kalender)
@@ -14,7 +14,7 @@
     '<button type="button" class="kalender-current-month" ng-click="currentMonth()">current</button>' +
     '<button type="button" class="kalender-next-month" ng-click="nextMonth()">next</button>' +
     '<table class="kalender-calendar">' +
-        '<caption class="kalender-calendar-title">{{ month.year }} – {{ month.month }}<caption>' +
+        '<caption class="kalender-calendar-title">{{ month.year }} – {{ month.month }}</caption>' +
         '<tr>' +
             '<th ng-repeat="heading in weekDayHeadings">' +
                 '{{ heading }}' +
@@ -93,4 +93,15 @@
         };
     })
     ;
-})(kalender);
+})(angular, kalender);
+
+(function(angular) {
+
+    angular
+    .module('kalenderExampleAngular', ['kalender.datepicker'])
+    .controller('MainController', ['$scope', function($scope) {
+        $scope.selection = { year: 2015, month: 6, day: 3 };
+    }])
+    ;
+
+})(angular);
