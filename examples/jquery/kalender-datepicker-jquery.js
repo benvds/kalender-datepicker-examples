@@ -111,7 +111,7 @@
         },
 
         'dayElementClasses': function(day) {
-            var elementClasses = [];
+            var elementClasses = ['kalender-day'];
 
             if (day.isSiblingMonth) {
                 elementClasses.push('kalender-is-sibling-month');
