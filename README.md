@@ -1,19 +1,13 @@
-# Kalender Angular
+# Kalender datepicker examples			
 
-An example implementation of the Kalender component using Angular.js.
+Example implementations of the [Kalender](https://github.com/benvds/kalender) component using various libraries.
 
-## Todo
+## Getting started
 
-- extract directive
-- create examples:
-  - basic example
-  - bootstrap
-  - date range (2 directives)
+    npm install && npm start
 
-- date range selection
-- highlight weekends (do not include in core)
-- recurring weekly (create separate events module)
-- recurring bi-weekly -> excluded, is edge case
-- select multiple days
-- actual click selection
-- 2 additional weeks around
+## Examples
+
+- [jQuery](http://localhost:3333/examples/jquery/)
+- [AngularJS](http://localhost:3333/examples/angular/)
+- [React](http://localhost:3333/examples/react/)
