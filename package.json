@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "angular": "^1.3.15",
+    "classnames": "^2.1.2",
     "jquery": "^2.1.4",
     "kalender": "git://github.com/benvds/kalender.git",
     "react": "^0.13.3"

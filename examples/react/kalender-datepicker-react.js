@@ -1,4 +1,4 @@
-;(function(React, kalender) {
+;(function(React, classNames, kalender) {
 
     var KALENDER_OPTIONS = {
         weekStart: 1
@@ -36,7 +36,7 @@
 
         render: function() {
             var day = this.props.day;
-            var classes = React.addons.classSet({
+            var classes = classNames('kalender-day', {
                 'kalender-is-sibling-month': day.isSiblingMonth,
                 'kalender-is-today': day.isToday,
                 'kalender-is-weekend': this.isWeekendDay(),
@@ -44,7 +44,7 @@
             });
 
             return (
-                <td className='kalender-day { classes }' onClick={ this.setSelection }>{ day.day }</td>
+                <td className={ classes } onClick={ this.setSelection }>{ day.day }</td>
             );
         }
     });
@@ -133,4 +133,4 @@
     React.render(<KalenderDatepicker selection={ initialSelection } />,
         document.getElementById('app'));
 
-})(React, kalender);
+})(React, classNames, kalender);
