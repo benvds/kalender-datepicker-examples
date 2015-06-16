@@ -1,4 +1,4 @@
-;(function(window, $, kalender) {
+;(function($, kalender) {
 
     var PLUGIN_NAME = 'kalenderDatepicker';
     var SELECTOR = '.kalender-datepicker';
@@ -153,4 +153,4 @@
         $(SELECTOR)[PLUGIN_NAME]();
     });
 
-})(window, jQuery, kalender);
+})(jQuery, kalender);
