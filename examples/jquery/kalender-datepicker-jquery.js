@@ -25,6 +25,14 @@
                 '</tr>' +
             '</table>' +
         '</div>';
+
+    function isWeekendDay(day) {
+        var SATURDAY_DAY_OF_WEEK = 6;
+        var SUNDAY_DAY_OF_WEEK = 0;
+
+        return (day.dayOfWeek === SATURDAY_DAY_OF_WEEK ||
+            day.dayOfWeek === SUNDAY_DAY_OF_WEEK);
+    }
     
     var KalenderDatepicker = function (element, options) {
         this.options = options || {};
@@ -32,7 +40,6 @@
         this.$element = $(element);
         this.currentMonth();
     };
-
 
     KalenderDatepicker.prototype = {
         'currentMonth': function() {
@@ -114,7 +121,7 @@
                 elementClasses.push('kalender-is-today');
             }
 
-            if (day.isWeekend) {
+            if (isWeekendDay(day)) {
                 elementClasses.push('kalender-is-weekend');
             }
 
