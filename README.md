@@ -8,6 +8,6 @@ Example implementations of the [Kalender](https://github.com/benvds/kalender) co
 
 ## Examples
 
-- [jQuery](http://localhost:3333/examples/jquery/)
-- [AngularJS](http://localhost:3333/examples/angular/)
-- [React](http://localhost:3333/examples/react/)
+- [jQuery](build/jquery/)
+- [AngularJS](build/angular/)
+- [React](build/react/)

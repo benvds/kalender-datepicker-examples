@@ -1,3 +1,6 @@
+var kalender = require('kalender');
+var angular = require('angular');
+
 ;(function(angular, kalender) {
     angular
     .module('kalender.datepicker', [])

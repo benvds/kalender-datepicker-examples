@@ -1,3 +1,7 @@
+var kalender = require('kalender');
+var React = require('react');
+var classNames = require('classnames');
+
 ;(function(React, classNames, kalender) {
 
     var KALENDER_OPTIONS = {

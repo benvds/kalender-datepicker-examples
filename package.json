@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "httpster"
+    "start": "httpster",
+    "build:copy": "mkdir -p build && cp -r src/shared build",
+    "build:angular": "mkdir -p build/angular && cp src/angular/index.html build/angular && browserify ./src/angular/index.js --debug --outfile ./build/angular/index.js",
+    "build:jquery": "mkdir -p build/jquery && cp src/jquery/index.html build/jquery && browserify ./src/jquery/index.js --debug --outfile ./build/jquery/index.js",
+    "build:react": "mkdir -p build/react && cp src/react/index.html build/react && browserify --transform reactify ./src/react/index.js --debug --outfile ./build/react/index.js",
+    "build": "rm -rfd build/* && npm run build:copy && npm run build:angular && npm run build:jquery && npm run build:react"
   },
   "author": {
     "name": "Ben van de Sande",
@@ -12,6 +17,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "browserify": "^10.2.4",
     "httpster": "^1.0.1"
   },
   "dependencies": {
@@ -19,6 +25,7 @@
     "classnames": "^2.1.2",
     "jquery": "^2.1.4",
     "kalender": "git://github.com/benvds/kalender.git",
-    "react": "^0.13.3"
+    "react": "^0.13.3",
+    "reactify": "^1.1.1"
   }
 }

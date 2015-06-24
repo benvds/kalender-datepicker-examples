@@ -1,3 +1,6 @@
+var kalender = require('kalender');
+var jQuery = require('jquery');
+
 ;(function($, kalender) {
 
     var PLUGIN_NAME = 'kalenderDatepicker';
