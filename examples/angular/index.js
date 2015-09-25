@@ -48,32 +48,30 @@
                     'sun'
                 ];
                 $scope.currentMonth = function() {
-                    $scope.month = {
+                    $scope.month = new kalender.Month({
                         year: (new Date()).getFullYear(),
                         month: 1 + (new Date()).getMonth()
-                    };
+                    });
                 };
 
                 $scope.isSelected = function(day) {
-                    if (angular.isDefined($scope.selection)) {
-                        return kalender.day.isEqual($scope.selection, day);
-                    } else {
+                    // if (angular.isDefined($scope.selection)) {
+                    //     return kalender.day.isEqual($scope.selection, day);
+                    // } else {
                         return false;
-                    }
+                    // }
                 };
 
                 $scope.previousMonth = function() {
-                    $scope.month =
-                        kalender.month.previousMonth($scope.month);
+                    $scope.month = $scope.month.previous();
                 };
 
                 $scope.nextMonth = function() {
-                    $scope.month =
-                        kalender.month.nextMonth($scope.month);
+                    $scope.month = $scope.month.next();
                 };
 
                 $scope.setSelection = function(day) {
-                    $scope.selection = day;
+                    // $scope.selection = day;
                 };
 
                 $scope.isWeekendDay = function(day) {
@@ -85,7 +83,8 @@
                 };
 
                 $scope.$watch('month', function(month) {
-                    $scope.calendar = kalender.calendar(month, options);
+                    $scope.calendar =
+                        (new kalender.Calendar(month, options)).days();
                 }, true);
 
                 $scope.currentMonth();

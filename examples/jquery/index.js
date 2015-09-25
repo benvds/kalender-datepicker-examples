@@ -33,7 +33,7 @@
         return (day.dayOfWeek === SATURDAY_DAY_OF_WEEK ||
             day.dayOfWeek === SUNDAY_DAY_OF_WEEK);
     }
-    
+
     var KalenderDatepicker = function (element, options) {
         this.options = options || {};
         this.selection = this.options.selection;
@@ -43,30 +43,28 @@
 
     KalenderDatepicker.prototype = {
         'currentMonth': function() {
-            this.month = {
+            this.month = new kalender.Month({
                 year: (new Date()).getFullYear(),
                 month: 1 + (new Date()).getMonth()
-            };
+            });
             this.render();
         },
 
         'isSelected': function(day) {
             if (typeof this.selection !== 'undefined') {
-                return kalender.day.isEqual(this.selection, day);
+                return day.isEqual(this.selection);
             } else {
                 return false;
             }
         },
 
         'previousMonth': function() {
-            this.month =
-                kalender.month.previousMonth(this.month);
+            this.month = this.month.previous();
             this.render();
         },
 
         'nextMonth': function() {
-            this.month =
-                (new kalender.Month(this.month)).next().days()[0];
+            this.month = this.month.next();
             this.render();
         },
 
@@ -76,7 +74,7 @@
         },
 
         'render': function () {
-            var calendar = kalender.calendar(this.month, KALENDER_OPTIONS);
+            var calendar = (new kalender.Calendar(this.month, KALENDER_OPTIONS)).days();
             var $weeks = calendar.map(function(week) {
                 return this.createWeekElement(week);
             }.bind(this));
@@ -134,12 +132,16 @@
     };
 
     $.fn[PLUGIN_NAME] = function () {
-        var options;
+        var options = {};
 
         return this.each(function () {
-            options = $.extend({}, {
-                selection: $(this).data('selection')
-            });
+            var selectionData = $(this).data('selection');
+
+            if (selectionData) {
+                options = $.extend({}, {
+                    selection: new kalender.Day(selectionData)
+                });
+            }
 
             if (!$.data(this, 'plugin-' + PLUGIN_NAME)) {
                 $.data(this, 'plugin-' + PLUGIN_NAME,
