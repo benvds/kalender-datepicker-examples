@@ -15,7 +15,8 @@
     var Day = React.createClass({
         'isSelected': function() {
             if (typeof this.props.selection !== 'undefined') {
-                return kalender.day.isEqual(this.props.selection, this.props.day);
+                // return kalender.day.isEqual(this.props.selection, this.props.day);
+                return this.props.selection.isEqual(this.props.day);
             } else {
                 return false;
             }
@@ -51,23 +52,25 @@
 
     var KalenderDatepicker = React.createClass({
         'currentMonth': function() {
+            var today = new Date();
+
             this.setState({
-                month: {
-                    year: (new Date()).getFullYear(),
-                    month: 1 + (new Date()).getMonth()
-                }
+                month: (new kalender.Month({
+                    year: today.getFullYear(),
+                    month: today.getMonth() + 1
+                })).days()[0]
             });
         },
 
         'previousMonth': function() {
             this.setState({
-                month: kalender.month.previousMonth(this.state.month)
+                month: (new kalender.Month(this.state.month)).previous().days()[0]
             });
         },
 
         'nextMonth': function() {
             this.setState({
-                month: kalender.month.nextMonth(this.state.month)
+                month: (new kalender.Month(this.state.month)).next().days()[0]
             });
         },
 
@@ -79,13 +82,14 @@
 
         getInitialState: function() {
             return {
+                // TODO here, month is actually viewdate or something, need 2 states, one for view state and one for selection
                 month: this.props.selection,
                 selection: this.props.selection
             };
         },
 
         render: function() {
-            var weeks = kalender.calendar(this.state.month, KALENDER_OPTIONS).map(function(week) {
+            var weeks = (new kalender.Calendar(this.state.month, KALENDER_OPTIONS)).days().map(function(week) {
                 var days = week.map(function(day) {
                     return (
                         <Day day={ day } selection={ this.state.selection } onSelectionChange={ this.handleSelectionChange } />
@@ -124,11 +128,11 @@
         }
     });
 
-    var initialSelection = {
+    var initialSelection = new kalender.Day({
         year: 2015,
         month: 6,
         day: 5
-    };
+    });
 
     React.render(<KalenderDatepicker selection={ initialSelection } />,
         document.getElementById('app'));

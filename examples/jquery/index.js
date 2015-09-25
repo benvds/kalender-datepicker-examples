@@ -66,7 +66,7 @@
 
         'nextMonth': function() {
             this.month =
-                kalender.month.nextMonth(this.month);
+                (new kalender.Month(this.month)).next().days()[0];
             this.render();
         },
 
