@@ -55,11 +55,11 @@
                 };
 
                 $scope.isSelected = function(day) {
-                    // if (angular.isDefined($scope.selection)) {
-                    //     return kalender.day.isEqual($scope.selection, day);
-                    // } else {
+                    if (angular.isDefined($scope.selection)) {
+                        return day.isEqual($scope.selection);
+                    } else {
                         return false;
-                    // }
+                    }
                 };
 
                 $scope.previousMonth = function() {
@@ -71,7 +71,7 @@
                 };
 
                 $scope.setSelection = function(day) {
-                    // $scope.selection = day;
+                    $scope.selection = day;
                 };
 
                 $scope.isWeekendDay = function(day) {
@@ -99,7 +99,7 @@
     angular
     .module('kalenderExampleAngular', ['kalender.datepicker'])
     .controller('MainController', ['$scope', function($scope) {
-        $scope.selection = { year: 2015, month: 6, day: 3 };
+        $scope.selection = new kalender.Day({ year: 2015, month: 6, day: 3 });
     }])
     ;
 

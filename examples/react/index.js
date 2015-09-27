@@ -15,7 +15,6 @@
     var Day = React.createClass({
         'isSelected': function() {
             if (typeof this.props.selection !== 'undefined') {
-                // return kalender.day.isEqual(this.props.selection, this.props.day);
                 return this.props.selection.isEqual(this.props.day);
             } else {
                 return false;
