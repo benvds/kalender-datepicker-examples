@@ -81,7 +81,8 @@
 
         getInitialState: function() {
             return {
-                // TODO here, month is actually viewdate or something, need 2 states, one for view state and one for selection
+                // TODO here, month is actually viewdate or something,
+                // need 2 states, one for view state and one for selection
                 month: this.props.selection,
                 selection: this.props.selection
             };
