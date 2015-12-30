@@ -1,8 +1,7 @@
 ;(function(angular, kalender) {
     angular
     .module('kalender.datepicker', [])
-    .constant('kalender', kalender)
-    .directive('kalenderDatepicker', function() {
+    .directive('kalender', function() {
         return {
             replace: true,
             scope: {
@@ -54,10 +53,14 @@
                     return date.getMonth() !== $scope.month.getMonth();
                 };
 
+                function isSameDay(first, second) {
+                    return first.getDate() === second.getDate() &&
+                        first.getMonth() === second.getMonth() &&
+                        first.getFullYear() === second.getFullYear();
+                }
+
                 $scope.isToday = function(date) {
-                    return date.getDate() === $scope.month.getDate() &&
-                        date.getMonth() === $scope.month.getMonth() &&
-                        date.getFullYear() === $scope.month.getFullYear();
+                    return isSameDay(date, $scope.month);
                 };
 
                 $scope.isWeekendDay = function(date) {
@@ -70,7 +73,7 @@
 
 
                 $scope.isSelected = function(date) {
-                    return $scope.selection && (+date === +$scope.selection);
+                    return isSameDay(date, $scope.selection);
                 };
 
                 $scope.previousMonth = function() {
@@ -105,7 +108,7 @@
     angular
     .module('kalenderExampleAngular', ['kalender.datepicker'])
     .controller('MainController', ['$scope', function($scope) {
-        // $scope.selection = new Date();
+        $scope.selection = { date: new Date('2015-12-23' )};
         $scope.weekStart = 1;
     }])
     ;

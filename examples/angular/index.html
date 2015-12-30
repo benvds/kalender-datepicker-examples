@@ -9,7 +9,15 @@
     <body ng-controller="MainController">
         <h1>Kalender Example Angular</h1>
 
-        <kalender-datepicker selection=selection week-start=weekStart></kalender-datepicker>
+        <ng-form="date-form">
+            <p>
+                <input name="selection-date" type=date ng-model=selection.date />
+            </p>
+
+            <p>
+                <kalender selection=selection.date week-start=weekStart></kalender>
+            </p>
+        </ng-form>
         
         <script src="../../node_modules/kalender/dist/kalender.js"></script>
         <script src="../../node_modules/angular/angular.js"></script>
