@@ -73,7 +73,8 @@
 
 
                 $scope.isSelected = function(date) {
-                    return isSameDay(date, $scope.selection);
+                    return $scope.selection &&
+                        isSameDay(date, $scope.selection);
                 };
 
                 $scope.previousMonth = function() {

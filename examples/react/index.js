@@ -11,21 +11,20 @@
             day.dayOfWeek === SUNDAY_DAY_OF_WEEK);
     }
 
+    function isSameDay(first, second) {
+        return first.getDate() === second.getDate() &&
+            first.getMonth() === second.getMonth() &&
+            first.getFullYear() === second.getFullYear();
+    }
+
     var Day = React.createClass({
         'isSelected': function() {
-            if (typeof this.props.selection !== 'undefined') {
-                return +this.props.selection === +this.props.day;
-            } else {
-                return false;
-            }
+            return this.props.selection &&
+                isSameDay(this.props.selection, this.props.day);
         },
 
         'isToday': function() {
-            var day = this.props.day;
-
-            return day.getDate() === today.getDate() &&
-                day.getMonth() === today.getMonth() &&
-                day.getFullYear() === today.getFullYear();
+            return isSameDay(this.props.day, today);
         },
 
         'isWeekendDay': function() {
@@ -81,27 +80,26 @@
             });
         },
 
-        handleSelectionChange: function(day) {
-            this.setState({
-                selection: day
-            });
+        handleSelectionChange: function(date) {
+            this.props.onChange(dateValue(date));
         },
 
         getInitialState: function() {
             return {
-                month: this.props.selection,
-                selection: this.props.selection
+                month: new Date(this.props.selection)
             };
         },
 
         render: function() {
             var k = kalender(this.state.month, WEEK_START);
+            var selectionDate = new Date(this.props.selection);
+
             var weeks = (k.map(function(week) {
                 var days = week.map(function(day) {
                     return (
                         <Day day={ day } 
                             month={ this.state.month }
-                            selection={ this.state.selection }
+                            selection={ selectionDate }
                             onSelectionChange={ this.handleSelectionChange } />
                     );
                 }.bind(this));
@@ -138,9 +136,54 @@
         }
     });
 
-    var initialSelection = new Date();
+    /**
+     *  Returns a RFC3339 date string.
+     *
+     *  A input[type=date] value should be a date string value according to:
+     *  https://tools.ietf.org/html/rfc3339#section-5.6
+     *
+     *  @argument {Date} date
+     *
+     *  @returns RFC3339 date string, e.g. '2015-01-01'
+     */
+    function dateValue(date) {
+        return date.getFullYear() + '-' +
+            formatTwoDigits(date.getMonth() + 1) + '-' +
+            formatTwoDigits(date.getDate());
+    }
 
-    React.render(<KalenderDatepicker selection={ initialSelection } />,
+    function formatTwoDigits(number) {
+        return ('00' + number).slice(-2);
+    }
+
+    var KalenderExample = React.createClass({
+        getInitialState: function() {
+            return {
+                date: dateValue(new Date())
+            };
+        },
+
+        handleInput: function(event) {
+            this.setState({ date: event.target.value });
+        },
+
+        handleChange: function(date) {
+            this.setState({ date: date });
+        },
+
+        render: function() {
+            var value = this.state.date;
+
+            return (
+                <form name="date-form">
+                    <p><input type="date" name="selection-date" value={ value } onInput={ this.handleInput } /></p>
+                    <p><KalenderDatepicker selection={ value } onChange={ this.handleChange } /></p>
+                </form>
+            );
+        }
+    });
+
+    React.render(<KalenderExample />,
         document.getElementById('app'));
 
 })(React, classNames, kalender);
