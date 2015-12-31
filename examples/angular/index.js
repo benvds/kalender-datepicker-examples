@@ -1,4 +1,4 @@
-;(function(angular, kalender) {
+;(function(angular, kalender, util) {
     angular
     .module('kalender.datepicker', [])
     .directive('kalender', function() {
@@ -9,7 +9,7 @@
                 weekStart: '='
             },
             template: '' +
-    '<div class="kalender">' +
+'<div class="kalender">' +
     '<button type="button" class="kalender-previous-month" ng-click="previousMonth()">previous</button>' +
     '<button type="button" class="kalender-current-month" ng-click="currentMonth()">current</button>' +
     '<button type="button" class="kalender-next-month" ng-click="nextMonth()">next</button>' +
@@ -26,15 +26,17 @@
                 'ng-click="setSelection(date)" ' +
                 'ng-class="{ \'kalender-is-sibling-month\': isOtherMonth(date), ' +
                 '\'kalender-is-today\': isToday(date), ' +
-                '\'kalender-is-weekend\': isWeekendDay(date), ' +
+                '\'kalender-is-weekend\': isWeekend(date), ' +
                 '\'kalender-is-selected\': isSelected(date) ' +
                 '}">' +
                 '{{ date.getDate() }}' +
             '</td>' +
         '</tr>' +
     '</table>' +
-    '</div>',
+'</div>',
             link: function($scope) {
+                var today = new Date();
+
                 $scope.calendar = [];
                 $scope.weekDayHeadings = [
                     'mon',
@@ -53,40 +55,23 @@
                     return date.getMonth() !== $scope.month.getMonth();
                 };
 
-                function isSameDay(first, second) {
-                    return first.getDate() === second.getDate() &&
-                        first.getMonth() === second.getMonth() &&
-                        first.getFullYear() === second.getFullYear();
-                }
-
                 $scope.isToday = function(date) {
-                    return isSameDay(date, $scope.month);
+                    return util.isSameDay(date, today);
                 };
 
-                $scope.isWeekendDay = function(date) {
-                    var SATURDAY_INDEX = 6;
-                    var SUNDAY_INDEX = 0;
-
-                    return (date.getDay() === SATURDAY_INDEX ||
-                        date.getDay() === SUNDAY_INDEX);
-                };
-
+                $scope.isWeekend = util.isWeekend;
 
                 $scope.isSelected = function(date) {
                     return $scope.selection &&
-                        isSameDay(date, $scope.selection);
+                        util.isSameDay(date, $scope.selection);
                 };
 
                 $scope.previousMonth = function() {
-                    $scope.month =
-                        new Date($scope.month.getFullYear(),
-                                $scope.month.getMonth() - 1);
+                    $scope.month = util.prevMonth($scope.month);
                 };
 
                 $scope.nextMonth = function() {
-                    $scope.month =
-                        new Date($scope.month.getFullYear(),
-                                $scope.month.getMonth() + 1);
+                    $scope.month = util.nextMonth($scope.month);
                 };
 
                 $scope.setSelection = function(date) {
@@ -102,7 +87,7 @@
         };
     })
     ;
-})(angular, kalender);
+})(angular, kalender, util);
 
 (function(angular) {
 

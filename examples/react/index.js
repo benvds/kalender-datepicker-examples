@@ -1,39 +1,21 @@
-;(function(React, classNames, kalender) {
+;(function(React, classNames, kalender, util) {
 
     var WEEK_START = 1;
     var today = new Date();
 
-    function isWeekendDay(day) {
-        var SATURDAY_DAY_OF_WEEK = 6;
-        var SUNDAY_DAY_OF_WEEK = 0;
-
-        return (day.dayOfWeek === SATURDAY_DAY_OF_WEEK ||
-            day.dayOfWeek === SUNDAY_DAY_OF_WEEK);
-    }
-
-    function isSameDay(first, second) {
-        return first.getDate() === second.getDate() &&
-            first.getMonth() === second.getMonth() &&
-            first.getFullYear() === second.getFullYear();
-    }
 
     var Day = React.createClass({
         'isSelected': function() {
             return this.props.selection &&
-                isSameDay(this.props.selection, this.props.day);
+                util.isSameDay(this.props.selection, this.props.day);
         },
 
         'isToday': function() {
-            return isSameDay(this.props.day, today);
+            return util.isSameDay(this.props.day, today);
         },
 
         'isWeekendDay': function() {
-            var SATURDAY_DAY_OF_WEEK = 6;
-            var SUNDAY_DAY_OF_WEEK = 0;
-            var day = this.props.day;
-
-            return (day.getDay() === SATURDAY_DAY_OF_WEEK ||
-                day.getDay() === SUNDAY_DAY_OF_WEEK);
+            return util.isWeekend(this.props.day);
         },
 
         'isOtherMonth': function() {
@@ -68,20 +50,18 @@
 
         'previousMonth': function() {
             this.setState({
-                month: new Date(this.state.month.getFullYear(),
-                               this.state.month.getMonth() - 1)
+                month: util.prevMonth(this.state.month)
             });
         },
 
         'nextMonth': function() {
             this.setState({
-                month: new Date(this.state.month.getFullYear(),
-                               this.state.month.getMonth() + 1)
+                month: util.nextMonth(this.state.month)
             });
         },
 
         handleSelectionChange: function(date) {
-            this.props.onChange(dateValue(date));
+            this.props.onChange(util.dateValue(date));
         },
 
         getInitialState: function() {
@@ -136,30 +116,10 @@
         }
     });
 
-    /**
-     *  Returns a RFC3339 date string.
-     *
-     *  A input[type=date] value should be a date string value according to:
-     *  https://tools.ietf.org/html/rfc3339#section-5.6
-     *
-     *  @argument {Date} date
-     *
-     *  @returns RFC3339 date string, e.g. '2015-01-01'
-     */
-    function dateValue(date) {
-        return date.getFullYear() + '-' +
-            formatTwoDigits(date.getMonth() + 1) + '-' +
-            formatTwoDigits(date.getDate());
-    }
-
-    function formatTwoDigits(number) {
-        return ('00' + number).slice(-2);
-    }
-
     var KalenderExample = React.createClass({
         getInitialState: function() {
             return {
-                date: dateValue(new Date())
+                date: util.dateValue(new Date())
             };
         },
 
@@ -186,4 +146,4 @@
     React.render(<KalenderExample />,
         document.getElementById('app'));
 
-})(React, classNames, kalender);
+})(React, classNames, kalender, util);
