@@ -42,21 +42,12 @@
         return ('00' + number).slice(-2);
     }
 
-    function sortOldToNew(colection) {
-        return [].concat(colection)
+    function sortOldToNew(dates) {
+        return [].concat(dates)
             .sort(function(first, second) {
                 return +first - +second;
             });
     }
-
-    function isInBetween(collection, subject) {
-        if (collection.length < 2) { return false; }
-
-        var sorted = sortOldToNew(collection);
-
-        return +sorted[0] < +subject &&
-            +sorted[sorted.length - 1] > +subject;
-    };
 
     global.util = {
         isWeekend: isWeekend,
@@ -64,7 +55,7 @@
         prevMonth: prevMonth,
         nextMonth: nextMonth,
         dateValue: dateValue,
-        isInBetween: isInBetween
+        sortOldToNew: sortOldToNew
     };
 
 })(window);

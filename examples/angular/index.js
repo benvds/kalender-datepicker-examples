@@ -6,6 +6,7 @@
             replace: true,
             scope: {
                 selection: '=',
+                highlights: '=',
                 weekStart: '='
             },
             template: '' +
@@ -27,7 +28,9 @@
                 'ng-class="{ \'kalender-is-sibling-month\': isOtherMonth(date), ' +
                 '\'kalender-is-today\': isToday(date), ' +
                 '\'kalender-is-weekend\': isWeekend(date), ' +
-                '\'kalender-is-selected\': isSelected(date) ' +
+                '\'kalender-is-highlighted\': isHighlighted(date), ' +
+                '\'kalender-is-selected\': isSelected(date), ' +
+                '\'kalender-is-in-between\': isInBetween(date) ' +
                 '}">' +
                 '{{ date.getDate() }}' +
             '</td>' +
@@ -47,6 +50,8 @@
                     'sat',
                     'sun'
                 ];
+                $scope.highlights = $scope.highlights || [];
+
                 $scope.currentMonth = function() {
                     $scope.month = new Date();
                 };
@@ -61,9 +66,19 @@
 
                 $scope.isWeekend = util.isWeekend;
 
+                $scope.isHighlighted = function(date) {
+                    return $scope.highlights.some(function(selection) {
+                        return util.isSameDay(date, selection);
+                    });
+                };
+
                 $scope.isSelected = function(date) {
                     return $scope.selection &&
-                        util.isSameDay(date, $scope.selection);
+                        util.isSameDay($scope.selection, date);
+                }
+
+                $scope.isInBetween = function(date) {
+                    return util.isInBetween($scope.highlights, date);
                 };
 
                 $scope.previousMonth = function() {
@@ -94,7 +109,12 @@
     angular
     .module('kalenderExampleAngular', ['kalender.datepicker'])
     .controller('MainController', ['$scope', function($scope) {
-        $scope.selection = { date: new Date('2015-12-23' )};
+        $scope.selection = {
+            dates: [
+                new Date('2015-12-17'),
+                new Date('2015-12-24'),
+            ]
+        };
         $scope.weekStart = 1;
     }])
     ;

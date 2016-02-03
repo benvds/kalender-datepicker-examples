@@ -15,8 +15,11 @@ body {
     text-align: center;
     background-color: white;
 }
-.kalender-calendar td.kalender-is-selected {
+.kalender-calendar td.kalender-is-highlighted {
     background-color: #ddd;
+}
+.kalender-calendar td.kalender-is-selected {
+    background-color: #ccc;
 }
 .kalender-day {
     cursor: pointer;

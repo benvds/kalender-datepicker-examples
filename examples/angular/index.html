@@ -11,11 +11,13 @@
 
         <ng-form="date-form">
             <p>
-                <input name="selection-date" type=date ng-model=selection.date />
+                <input name="selection-date-1" type=date ng-model=selection.dates[0] />
+                <input name="selection-date-2" type=date ng-model=selection.dates[1] />
             </p>
 
             <p>
-                <kalender selection=selection.date week-start=weekStart></kalender>
+                <kalender selection=selection.dates[0] highlights=selection.dates week-start=weekStart></kalender>
+                <kalender selection=selection.dates[1] highlights=selection.dates week-start=weekStart></kalender>
             </p>
         </ng-form>
         
