@@ -10,6 +10,18 @@
                 util.isSameDay(this.props.selection, this.props.day);
         },
 
+        'isHighlighted': function() {
+            return this.props.highlights.some((highlight) => {
+                return util.isSameDay(this.props.day, new Date(highlight));
+            });
+        },
+
+        'isInBetween': function() {
+            return util.isInBetween(
+                    this.props.highlights.map((d) => new Date(d)),
+                    this.props.day);
+        },
+
         'isToday': function() {
             return util.isSameDay(this.props.day, today);
         },
@@ -32,7 +44,9 @@
                 'kalender-is-sibling-month': this.isOtherMonth(),
                 'kalender-is-today': this.isToday(),
                 'kalender-is-weekend': this.isWeekendDay(),
-                'kalender-is-selected': this.isSelected()
+                'kalender-is-selected': this.isSelected(),
+                'kalender-is-highlighted': this.isHighlighted(),
+                'kalender-is-in-between': this.isInBetween()
             });
 
             return (
@@ -80,6 +94,7 @@
                         <Day day={ day } 
                             month={ this.state.month }
                             selection={ selectionDate }
+                            highlights = { this.props.highlights }
                             onSelectionChange={ this.handleSelectionChange } />
                     );
                 }.bind(this));
@@ -119,26 +134,71 @@
     var KalenderExample = React.createClass({
         getInitialState: function() {
             return {
-                date: util.dateValue(new Date())
+                dates: [
+                    util.dateValue(new Date()),
+                    util.dateValue(new Date())
+                ]
             };
         },
 
-        handleInput: function(event) {
-            this.setState({ date: event.target.value });
+        handleFirstInput: function(event) {
+            this.setState({ dates: [
+                event.target.value,
+                this.state.dates[1]
+            ] });
         },
 
-        handleChange: function(date) {
-            this.setState({ date: date });
+        handleLastInput: function(event) {
+            this.setState({ dates: [
+                this.state.dates[0],
+                event.target.value
+            ] });
+        },
+
+        handleFirstChange: function(date) {
+            this.setState({ dates: [
+                date,
+                this.state.dates[1]
+            ] });
+        },
+
+        handleLastChange: function(date) {
+            this.setState({ dates: [
+                this.state.dates[0],
+                date
+            ] });
         },
 
         render: function() {
-            var value = this.state.date;
-
             return (
-                <form name="date-form">
-                    <p><input type="date" name="selection-date" value={ value } onInput={ this.handleInput } /></p>
-                    <p><KalenderDatepicker selection={ value } onChange={ this.handleChange } /></p>
-                </form>
+<form name="date-form">
+    <p>
+        <input
+            type="date"
+            name="selection-first"
+            value={ this.state.dates[0] }
+            onInput={ this.handleFirstInput } />
+    </p>
+    <p>
+        <KalenderDatepicker
+            selection={ this.state.dates[0] }
+            highlights={ this.state.dates }
+            onChange={ this.handleFirstChange } />
+    </p>
+    <p>
+        <input
+            type="date"
+            name="selection-last"
+            value={ this.state.dates[1] }
+            onInput={ this.handleLastInput } />
+    </p>
+    <p>
+        <KalenderDatepicker
+            selection={ this.state.dates[1] }
+            highlights={ this.state.dates }
+            onChange={ this.handleLastChange } />
+    </p>
+</form>
             );
         }
     });
