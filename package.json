@@ -18,7 +18,7 @@
     "angular": "^1.3.15",
     "classnames": "^2.1.2",
     "jquery": "^2.1.4",
-    "kalender": "../kalender",
+    "kalender": "git@github.com:benvds/kalender.git#v0.4.1",
     "react": "^0.13.3"
   }
 }
