@@ -9,10 +9,15 @@
     <body ng-controller="MainController">
         <h1>Kalender Example jQuery</h1>
 
-        <div class="kalender-datepicker" data-selection='{ "year": 2015, "month": 6, "day": 5 }'></div>
+        <div
+                class="kalender-datepicker"
+                data-selection='2016-02-02'
+                data-highlights='["2016-02-02", "2016-02-05" ]'>
+        </div>
         
         <script src="../../node_modules/kalender/dist/kalender.js"></script>
         <script src="../../node_modules/jquery/dist/jquery.js"></script>
+        <script src="../shared/util.js"></script>
         <script src="./index.js"></script>
     </body>
 </html>

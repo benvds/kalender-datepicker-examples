@@ -2,9 +2,7 @@
 
     var PLUGIN_NAME = 'kalenderDatepicker';
     var SELECTOR = '.kalender-datepicker';
-    var KALENDER_OPTIONS = {
-        weekStart: 1
-    };
+    var WEEK_START = 1;
     var BASE_TEMPLATE = '' +
         '<div class="kalender">' +
             '<button type="button" class="kalender-previous-month"">previous</button>' +
@@ -26,45 +24,48 @@
             '</table>' +
         '</div>';
 
-    function isWeekendDay(day) {
-        var SATURDAY_DAY_OF_WEEK = 6;
-        var SUNDAY_DAY_OF_WEEK = 0;
-
-        return (day.dayOfWeek === SATURDAY_DAY_OF_WEEK ||
-            day.dayOfWeek === SUNDAY_DAY_OF_WEEK);
-    }
-
     var KalenderDatepicker = function (element, options) {
         this.options = options || {};
         this.selection = this.options.selection;
+        this.highlights = this.options.highlights || [];
         this.$element = $(element);
-        this.currentMonth();
+        this.month = new Date();
+        this.render();
     };
 
     KalenderDatepicker.prototype = {
-        'currentMonth': function() {
-            this.month = new kalender.Month({
-                year: (new Date()).getFullYear(),
-                month: 1 + (new Date()).getMonth()
-            });
-            this.render();
-        },
-
         'isSelected': function(day) {
             if (typeof this.selection !== 'undefined') {
-                return day.isEqual(this.selection);
+                return util.isSameDay(new Date(this.selection), day);
             } else {
                 return false;
             }
         },
 
+        'isHighlighted': function(day) {
+            return this.highlights.some((highlight) => {
+                return util.isSameDay(day, new Date(highlight));
+            });
+        },
+
+        'isInBetween': function(day) {
+            return util.isInBetween(
+                    this.highlights.map((d) => new Date(d)),
+                    day);
+        },
+
+        'currentMonth': function() {
+            this.month = new Date();
+            this.render();
+        },
+
         'previousMonth': function() {
-            this.month = this.month.previous();
+            this.month = util.prevMonth(this.month);
             this.render();
         },
 
         'nextMonth': function() {
-            this.month = this.month.next();
+            this.month = util.nextMonth(this.month);
             this.render();
         },
 
@@ -74,15 +75,15 @@
         },
 
         'render': function () {
-            var calendar = (new kalender.Calendar(this.month, KALENDER_OPTIONS)).days();
+            var calendar = kalender(this.month, WEEK_START);
             var $weeks = calendar.map(function(week) {
                 return this.createWeekElement(week);
             }.bind(this));
 
             this.$element.html(BASE_TEMPLATE);
             this.$element.find('.kalender-calendar').append($weeks);
-            this.$element.find('.kalender-year').text(this.month.year);
-            this.$element.find('.kalender-month').text(this.month.month);
+            this.$element.find('.kalender-year').text(this.month.getFullYear());
+            this.$element.find('.kalender-month').text(this.month.getMonth() + 1);
 
             // TODO cleanup, probably will leak memory
             this.$element.find('.kalender-previous-month').on('click', this.previousMonth.bind(this));
@@ -101,7 +102,7 @@
         // TODO cleanup, probably will leak memory
         'createDayElement': function(day) {
             return $('<td></td>')
-                .text(day.day)
+                .text(day.getDate())
                 .addClass(this.dayElementClasses(day))
                 .on('click', function() {
                     this.setSelection(day);
@@ -111,20 +112,28 @@
         'dayElementClasses': function(day) {
             var elementClasses = ['kalender-day'];
 
-            if (day.isSiblingMonth) {
+            if (day.getMonth() !== this.month.getMonth()) {
                 elementClasses.push('kalender-is-sibling-month');
             }
 
-            if (day.isToday) {
+            if (util.isSameDay(new Date(), day)) {
                 elementClasses.push('kalender-is-today');
             }
 
-            if (isWeekendDay(day)) {
+            if (util.isWeekend(day)) {
                 elementClasses.push('kalender-is-weekend');
             }
 
             if (this.isSelected(day)) {
                 elementClasses.push('kalender-is-selected');
+            }
+
+            if (this.isHighlighted(day)) {
+                elementClasses.push('kalender-is-highlighted');
+            }
+
+            if (this.isInBetween(day)) {
+                elementClasses.push('kalender-is-in-between');
             }
 
             return elementClasses.join(' ');
@@ -135,13 +144,13 @@
         var options = {};
 
         return this.each(function () {
-            var selectionData = $(this).data('selection');
+            var selection = $(this).data('selection');
+            var highlights = $(this).data('highlights');
 
-            if (selectionData) {
-                options = $.extend({}, {
-                    selection: new kalender.Day(selectionData)
-                });
-            }
+            options = $.extend({}, {
+                selection: selection,
+                highlights: highlights
+            });
 
             if (!$.data(this, 'plugin-' + PLUGIN_NAME)) {
                 $.data(this, 'plugin-' + PLUGIN_NAME,
