@@ -105,28 +105,47 @@
             }.bind(this)));
 
             return (
-                <div className="kalender">
-                    <button type="button" className="kalender-previous-month" onClick={ this.previousMonth }>previous</button>
-                    <button type="button" className="kalender-current-month" onClick={ this.currentMonth }>current</button>
-                    <button type="button" className="kalender-next-month" onClick={ this.nextMonth }>next</button>
-                    <table className="kalender-calendar">
-                        <thead>
-                            <caption className="kalender-calendar-title">{ this.state.month.getFullYear() } – { this.state.month.getMonth() + 1 }</caption>
-                            <tr>
-                               <th>mon</th>
-                               <th>tue</th>
-                               <th>wed</th>
-                               <th>thu</th>
-                               <th>fri</th>
-                               <th>sat</th>
-                               <th>sun</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            { weeks }
-                        </tbody>
-                    </table>
-                </div>
+<div className="kalender">
+    <button
+            type="button"
+            className="kalender-previous-month"
+            onClick={ this.previousMonth }>
+        previous
+    </button>
+    <button
+            type="button"
+            className="kalender-current-month"
+            onClick={ this.currentMonth }>
+        current
+    </button>
+    <button
+            type="button"
+            className="kalender-next-month"
+            onClick={ this.nextMonth }>
+        next
+    </button>
+    <table
+            className="kalender-calendar">
+        <thead>
+            <caption
+                    className="kalender-calendar-title">
+                { this.state.month.getFullYear() } – { this.state.month.getMonth() + 1 }
+            </caption>
+            <tr>
+               <th>mon</th>
+               <th>tue</th>
+               <th>wed</th>
+               <th>thu</th>
+               <th>fri</th>
+               <th>sat</th>
+               <th>sun</th>
+            </tr>
+        </thead>
+        <tbody>
+            { weeks }
+        </tbody>
+    </table>
+</div>
             );
         }
     });
@@ -174,29 +193,29 @@
 <form name="date-form">
     <p>
         <input
-            type="date"
-            name="selection-first"
-            value={ this.state.dates[0] }
-            onInput={ this.handleFirstInput } />
+                type="date"
+                name="selection-first"
+                value={ this.state.dates[0] }
+                onInput={ this.handleFirstInput } />
     </p>
     <p>
         <KalenderDatepicker
-            selection={ this.state.dates[0] }
-            highlights={ this.state.dates }
-            onChange={ this.handleFirstChange } />
+                selection={ this.state.dates[0] }
+                highlights={ this.state.dates }
+                onChange={ this.handleFirstChange } />
     </p>
     <p>
         <input
-            type="date"
-            name="selection-last"
-            value={ this.state.dates[1] }
-            onInput={ this.handleLastInput } />
+                type="date"
+                name="selection-last"
+                value={ this.state.dates[1] }
+                onInput={ this.handleLastInput } />
     </p>
     <p>
         <KalenderDatepicker
-            selection={ this.state.dates[1] }
-            highlights={ this.state.dates }
-            onChange={ this.handleLastChange } />
+                selection={ this.state.dates[1] }
+                highlights={ this.state.dates }
+                onChange={ this.handleLastChange } />
     </p>
 </form>
             );
